@@ -22,21 +22,28 @@ class MediaViewController: BaseViewController {
     
     var titleList: [String] = []
     
-    var dataList: [[Media]] = Array(repeating: [], count: TMDBAPIManager.List.allCases.count)
+    var dataList: [[Media]] = Array(repeating: [], count: TMDBAPIManager.Home.allCases.count)
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        for i in 0..<TMDBAPIManager.List.allCases.count {
-            let url = TMDBAPIManager.List.allCases[i].url
-            TMDBAPIManager.shared.callRequest(url: url) { data in
+        let group = DispatchGroup()
+        
+        for i in 0..<TMDBAPIManager.Home.allCases.count {
+            group.enter()
+            let url = TMDBAPIManager.Home.allCases[i].url
+            TMDBAPIManager.shared.mediaRequest(url: url) { data in
                 self.dataList[i] = data
-                self.tableView.reloadData()
+                group.leave()
             }
         }
         
-        for i in TMDBAPIManager.List.allCases {
+        for i in TMDBAPIManager.Home.allCases {
             titleList.append(i.rawValue)
+        }
+        
+        group.notify(queue: .main) {
+            self.tableView.reloadData()
         }
     }
     
@@ -100,5 +107,11 @@ extension MediaViewController: UICollectionViewDelegate, UICollectionViewDataSou
         return cell
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        let vc = DetailViewController()
+        vc.id = dataList[collectionView.tag][indexPath.item].id
+
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }

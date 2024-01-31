@@ -14,10 +14,11 @@ class TMDBAPIManager {
     private init() {}
     
     let baseImageURL = "https://image.tmdb.org/t/p/w500"
-    
+    let baseURL = "https://api.themoviedb.org/3/"
+    let isoURL = "?language=ko-KR"
     let headers: HTTPHeaders = ["Authorization": APIKey.TMDBKey]
     
-    enum List: String, CaseIterable {
+    enum Home: String, CaseIterable {
         case TVTrend
         case TopRate
         case Popular
@@ -34,7 +35,7 @@ class TMDBAPIManager {
         }
     }
     
-    func callRequest(url: String, completionHandler: @escaping ([Media]) -> Void) {
+    func mediaRequest(url: String, completionHandler: @escaping ([Media]) -> Void) {
         
         AF.request(url, headers: headers).responseDecodable(of: MediaModel.self) { response in
             switch response.result {
@@ -46,5 +47,29 @@ class TMDBAPIManager {
         }
     }
     
-    
+    func detailRequest(id: Int, completionHandler: @escaping (DetailModel) -> Void) {
+        
+        let url = baseURL + "tv/\(id)" + isoURL
+        AF.request(url, headers: headers).responseDecodable(of: DetailModel.self) { response in
+            switch response.result {
+            case .success(let data):
+                completionHandler(data)
+            case .failure(let fail):
+                print(fail)
+            }
+        }
+    }
+
+    func recommendRequest(id: Int, completionHandler: @escaping ([Media]) -> Void) {
+        
+        let url = baseURL + "tv/\(id)/recommendations" + isoURL
+        AF.request(url, headers: headers).responseDecodable(of: MediaModel.self) { response in
+            switch response.result {
+            case .success(let data):
+                completionHandler(data.results)
+            case .failure(let fail):
+                print(fail)
+            }
+        }
+    }
 }

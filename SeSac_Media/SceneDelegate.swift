@@ -18,9 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: scene)
         
-        let vc = UINavigationController(rootViewController: MediaViewController())
+        let view = TabBarController()
         
-        window?.rootViewController = vc
+        window?.rootViewController = view
         window?.makeKeyAndVisible()
     }
 

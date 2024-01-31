@@ -24,9 +24,9 @@ class Step1_MediaViewController: UIViewController {
         configureView()
         
         for i in 0..<collectionViews.count {
-            let url = TMDBAPIManager.List.allCases[i].url
+            let url = TMDBAPIManager.Home.allCases[i].url
             
-            TMDBAPIManager.shared.callRequest(url: url) { data in
+            TMDBAPIManager.shared.mediaRequest(url: url) { data in
                 self.collectionViews[i].updateData(data: data)
             }
         }
@@ -63,7 +63,7 @@ extension Step1_MediaViewController {
         view.backgroundColor = .black
         
         for i in 0..<titleLabels.count {
-            titleLabels[i].text = TMDBAPIManager.List.allCases[i].rawValue
+            titleLabels[i].text = TMDBAPIManager.Home.allCases[i].rawValue
         }
     }
 }

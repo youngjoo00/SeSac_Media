@@ -12,16 +12,16 @@ import Then
 class Step2_MediaViewController: BaseViewController {
 
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: HorizontalCollectionView.configureCollectionViewLayout())
-    var list: [[Media]] = Array(repeating: [], count: TMDBAPIManager.List.allCases.count)
+    var list: [[Media]] = Array(repeating: [], count: TMDBAPIManager.Home.allCases.count)
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .black
         
-        for i in 0..<TMDBAPIManager.List.allCases.count {
-            let url = TMDBAPIManager.List.allCases[i].url
-            TMDBAPIManager.shared.callRequest(url: url) { data in
+        for i in 0..<TMDBAPIManager.Home.allCases.count {
+            let url = TMDBAPIManager.Home.allCases[i].url
+            TMDBAPIManager.shared.mediaRequest(url: url) { data in
                 self.list[i] = data
                 self.collectionView.reloadData()
             }

@@ -37,7 +37,7 @@ extension HorizontalCollectionView {
         delegate = self
         dataSource = self
         register(HorizontalCollectionViewCell.self, forCellWithReuseIdentifier: "HorizontalCollectionViewCell")
-        backgroundColor = .black
+        backgroundColor = .clear
     }
     
     static func configureCollectionViewLayout() -> UICollectionViewLayout {
@@ -65,7 +65,7 @@ extension HorizontalCollectionView: UICollectionViewDelegate, UICollectionViewDa
         let row = list[indexPath.item]
         
         guard let poster = row.poster_path else { return cell }
-        let url = URL(string: TMDBAPIManager.shared.imageURL + poster)
+        let url = URL(string: TMDBAPIManager.shared.baseImageURL + poster)
         cell.posterImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "square.and.arrow.down"))
         
         return cell

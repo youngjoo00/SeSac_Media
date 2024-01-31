@@ -8,39 +8,33 @@
 import UIKit
 import SnapKit
 
-class HorizontalCollectionViewCell: UICollectionViewCell {
+class HorizontalCollectionViewCell: BaseCollectionViewCell {
     
     let posterImageView = PosterImageView(frame: .zero)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        configureHierarchy()
-        configureLayout()
-        configureView()
+
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-extension HorizontalCollectionViewCell {
     
-    func configureHierarchy() {
+    override func configureHierarchy() {
         [
             posterImageView
         ].forEach { contentView.addSubview($0) }
     }
     
-    func configureLayout() {
+    override func configureLayout() {
         posterImageView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
         
     }
     
-    func configureView() {
+    override func configureView() {
         posterImageView.image = UIImage(systemName: "xmark")
     }
 }

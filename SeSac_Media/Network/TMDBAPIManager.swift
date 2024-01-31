@@ -13,11 +13,11 @@ class TMDBAPIManager {
     static let shared = TMDBAPIManager()
     private init() {}
     
-    let imageURL = "https://image.tmdb.org/t/p/w500"
+    let baseImageURL = "https://image.tmdb.org/t/p/w500"
     
     let headers: HTTPHeaders = ["Authorization": APIKey.TMDBKey]
     
-    enum EndPoint: String, CaseIterable {
+    enum List: String, CaseIterable {
         case TVTrend
         case TopRate
         case Popular

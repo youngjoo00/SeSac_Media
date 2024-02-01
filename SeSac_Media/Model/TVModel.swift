@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct MediaModel: Decodable {
-    let results: [Media]
+struct TVModel: Decodable {
+    let results: [TV]
 }
 
-struct Media: Decodable {
+struct TV: Decodable {
     let backdrop_path: String?
     let id: Int
     let original_name: String

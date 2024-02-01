@@ -13,31 +13,12 @@ class TMDBAPIManager {
     static let shared = TMDBAPIManager()
     private init() {}
     
-    let baseImageURL = "https://image.tmdb.org/t/p/w500"
-    let baseURL = "https://api.themoviedb.org/3/"
-    let isoURL = "?language=ko-KR"
-    let headers: HTTPHeaders = ["Authorization": APIKey.TMDBKey]
-    
-    enum Home: String, CaseIterable {
-        case TVTrend
-        case TopRate
-        case Popular
+    func fetchTV(api: TMDBAPI, completionHandler: @escaping ([TV]) -> Void) {
         
-        var url: String {
-            switch self {
-            case .TVTrend:
-                return "https://api.themoviedb.org/3/trending/tv/week?language=ko-KR"
-            case .TopRate:
-                return "https://api.themoviedb.org/3/tv/top_rated?language=ko-KR"
-            case .Popular:
-                return "https://api.themoviedb.org/3/tv/popular?language=ko-KR"
-            }
-        }
-    }
-    
-    func mediaRequest(url: String, completionHandler: @escaping ([Media]) -> Void) {
-        
-        AF.request(url, headers: headers).responseDecodable(of: MediaModel.self) { response in
+        AF.request(api.endpoint,
+                   parameters: api.parameter,
+                   encoding: URLEncoding(destination: .queryString),
+                   headers: api.header).responseDecodable(of: TVModel.self) { response in
             switch response.result {
             case .success(let data):
                 completionHandler(data.results)
@@ -47,10 +28,12 @@ class TMDBAPIManager {
         }
     }
     
-    func detailRequest(id: Int, completionHandler: @escaping (DetailModel) -> Void) {
+    func fetchDetail(api: TMDBAPI, completionHandler: @escaping (DetailModel) -> Void) {
         
-        let url = baseURL + "tv/\(id)" + isoURL
-        AF.request(url, headers: headers).responseDecodable(of: DetailModel.self) { response in
+        AF.request(api.endpoint,
+                   parameters: api.parameter,
+                   encoding: URLEncoding(destination: .queryString),
+                   headers: api.header).responseDecodable(of: DetailModel.self) { response in
             switch response.result {
             case .success(let data):
                 completionHandler(data)
@@ -59,14 +42,16 @@ class TMDBAPIManager {
             }
         }
     }
-
-    func recommendRequest(id: Int, completionHandler: @escaping ([Media]) -> Void) {
+    
+    func fetchCredit(api: TMDBAPI, completionHandler: @escaping ([Cast]) -> Void) {
         
-        let url = baseURL + "tv/\(id)/recommendations" + isoURL
-        AF.request(url, headers: headers).responseDecodable(of: MediaModel.self) { response in
+        AF.request(api.endpoint,
+                   parameters: api.parameter,
+                   encoding: URLEncoding(destination: .queryString),
+                   headers: api.header).responseDecodable(of: CreditModel.self) { response in
             switch response.result {
             case .success(let data):
-                completionHandler(data.results)
+                completionHandler(data.cast)
             case .failure(let fail):
                 print(fail)
             }

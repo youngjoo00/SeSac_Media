@@ -11,7 +11,7 @@ import Kingfisher
 
 class HorizontalCollectionView: UICollectionView {
     
-    var list: [Media] = []
+    var list: [TV] = []
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: HorizontalCollectionView.configureCollectionViewLayout())
@@ -28,7 +28,7 @@ class HorizontalCollectionView: UICollectionView {
 
 extension HorizontalCollectionView {
     
-    func updateData(data: [Media]) {
+    func updateData(data: [TV]) {
         self.list = data
         self.reloadData()
     }
@@ -65,7 +65,7 @@ extension HorizontalCollectionView: UICollectionViewDelegate, UICollectionViewDa
         let row = list[indexPath.item]
         
         guard let poster = row.poster_path else { return cell }
-        let url = URL(string: TMDBAPIManager.shared.baseImageURL + poster)
+        let url = URL(string: TMDBAPI.baseImageURL + poster)
         cell.posterImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "square.and.arrow.down"))
         
         return cell

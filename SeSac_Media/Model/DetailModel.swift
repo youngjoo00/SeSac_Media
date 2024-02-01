@@ -24,9 +24,12 @@ struct DetailModel: Decodable {
         case overview
         case posterPath = "poster_path"
     }
+    
 }
 
 struct Genre: Decodable {
     let id: Int
     let name: String?
 }
+
+

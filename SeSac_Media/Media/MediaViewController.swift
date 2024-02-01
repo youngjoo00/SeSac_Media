@@ -11,60 +11,45 @@ import Then
 
 class MediaViewController: BaseViewController {
 
-    lazy var tableView = UITableView().then {
-        $0.delegate = self
-        $0.dataSource = self
-        $0.register(MediaTableViewCell.self, forCellReuseIdentifier: MediaTableViewCell.identifier)
-        $0.rowHeight = 210
-        $0.backgroundColor = .clear
-        $0.isScrollEnabled = false
+    let mainView = MediaView()
+    
+    override func loadView() {
+        self.view = mainView
     }
     
-    var titleList: [String] = []
-    
-    var dataList: [[Media]] = Array(repeating: [], count: TMDBAPIManager.Home.allCases.count)
+    var titleList: [String] = ["TV Trend", "Top Rate", "Popular"]
+    lazy var dataList: [[TV]] = Array(repeating: [], count: titleList.count)
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        mainView.tableView.dataSource = self
+        mainView.tableView.delegate = self
+        
         let group = DispatchGroup()
         
-        for i in 0..<TMDBAPIManager.Home.allCases.count {
-            group.enter()
-            let url = TMDBAPIManager.Home.allCases[i].url
-            TMDBAPIManager.shared.mediaRequest(url: url) { data in
-                self.dataList[i] = data
-                group.leave()
-            }
+        group.enter()
+        TMDBAPIManager.shared.fetchTV(api: .tvTrend) { tv in
+            self.dataList[0] = tv
+            group.leave()
         }
         
-        for i in TMDBAPIManager.Home.allCases {
-            titleList.append(i.rawValue)
+        group.enter()
+        TMDBAPIManager.shared.fetchTV(api: .topRate) { tv in
+            self.dataList[1] = tv
+            group.leave()
+        }
+        
+        group.enter()
+        TMDBAPIManager.shared.fetchTV(api: .popular) { tv in
+            self.dataList[2] = tv
+            group.leave()
         }
         
         group.notify(queue: .main) {
-            self.tableView.reloadData()
+            self.mainView.tableView.reloadData()
         }
     }
-    
-    override func configureHierarchy() {
-        [
-            tableView
-        ].forEach { view.addSubview($0) }
-    }
-    
-    override func configureLayout() {
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
-    override func configureView() {
-    }
-    
-}
-
-extension MediaViewController {
     
 }
 
@@ -88,8 +73,7 @@ extension MediaViewController: UITableViewDelegate, UITableViewDataSource {
 
         return cell
     }
-    
-    
+
 }
 
 extension MediaViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -101,7 +85,7 @@ extension MediaViewController: UICollectionViewDelegate, UICollectionViewDataSou
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HorizontalCollectionViewCell.identifier, for: indexPath) as! HorizontalCollectionViewCell
         
         guard let poster = dataList[collectionView.tag][indexPath.row].poster_path else { return cell }
-        let url = URL(string: TMDBAPIManager.shared.baseImageURL + poster)
+        let url = URL(string: TMDBAPI.baseImageURL + poster)
         cell.posterImageView.kf.setImage(with: url)
 
         return cell

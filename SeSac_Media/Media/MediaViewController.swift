@@ -28,21 +28,22 @@ class MediaViewController: BaseViewController {
         
         let group = DispatchGroup()
         
+        // 만약 데이터가 안들어오면 ARCCount 가 초기화되지 않아서 notify를 실행할 수 없게된다,,
         group.enter()
-        TMDBAPIManager.shared.fetchTV(api: .tvTrend) { tv in
-            self.dataList[0] = tv
+        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .tvTrend) { tv in
+            self.dataList[0] = tv.results
             group.leave()
         }
         
         group.enter()
-        TMDBAPIManager.shared.fetchTV(api: .topRate) { tv in
-            self.dataList[1] = tv
+        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .topRate) { tv in
+            self.dataList[1] = tv.results
             group.leave()
         }
         
         group.enter()
-        TMDBAPIManager.shared.fetchTV(api: .popular) { tv in
-            self.dataList[2] = tv
+        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .popular) { tv in
+            self.dataList[2] = tv.results
             group.leave()
         }
         

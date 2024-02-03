@@ -63,6 +63,7 @@ class DetailTableViewCell: BaseTableViewCell {
         
         overviewLabel.font = .systemFont(ofSize: 15)
         overviewLabel.numberOfLines = 0
+        selectionStyle = .none
     }
 }
 

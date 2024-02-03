@@ -13,7 +13,7 @@ class DetailSubTableViewCell: BaseTableViewCell {
     
     let titleLabel = WhiteTitleLabel()
     
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout()).then {
+    lazy var collectionView = PosterCollectionView().then {
         $0.backgroundColor = .clear
         $0.register(HorizontalCollectionViewCell.self, forCellWithReuseIdentifier: HorizontalCollectionViewCell.identifier)
     }
@@ -35,24 +35,14 @@ class DetailSubTableViewCell: BaseTableViewCell {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(contentView)
-            make.height.equalTo(160)
+            //make.height.equalTo(160)
         }
     }
     
     override func configureView() {
-        
+        selectionStyle = .none
     }
 }
 
 extension DetailSubTableViewCell {
-    func configureCollectionViewLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        
-        layout.itemSize = CGSize(width: 120, height: 160)
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.scrollDirection = .horizontal
-        return layout
-    }
 }

@@ -10,15 +10,13 @@ import Kingfisher
 
 class DetailViewController: BaseViewController {
     
-    var id = 0
+    let mainView = DetailView()
     
-    lazy var tableView = UITableView().then {
-        $0.dataSource = self
-        $0.delegate = self
-        $0.register(DetailTableViewCell.self, forCellReuseIdentifier: DetailTableViewCell.identifier)
-        $0.register(DetailSubTableViewCell.self, forCellReuseIdentifier: DetailSubTableViewCell.identifier)
-        $0.backgroundColor = .clear
+    override func loadView() {
+        self.view = mainView
     }
+    
+    var id = 0
     
     var titleList = ["출연진", "유사한 장르 추천"]
     var dataList: DetailModel = DetailModel(adult: false, backdropPath: "", genres: [], id: 0, originalName: "", overview: "", posterPath: "")
@@ -28,62 +26,38 @@ class DetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        mainView.tableView.dataSource = self
+        mainView.tableView.delegate = self
+        
         let group = DispatchGroup()
         
         group.enter()
-        TMDBAPIManager.shared.fetchDetail(api: .detail(id: id)) { detail in
+        TMDBAPIManager.shared.callRequest(type: DetailModel.self, api: .detail(id: id)) { detail in
             self.dataList = detail
             group.leave()
         }
         
         group.enter()
-        TMDBAPIManager.shared.fetchTV(api: .recommend(id: id)) { recommend in
-            self.recommendList = recommend
-            print(self.recommendList)
+        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .recommend(id: id)) { recommend in
+            self.recommendList = recommend.results
             group.leave()
         }
         
         group.enter()
-        TMDBAPIManager.shared.fetchCredit(api: .credit(id: id)) { credit in
-            self.creditList = credit
-            print(self.creditList)
+        TMDBAPIManager.shared.callRequest(type: CreditModel.self, api: .credit(id: id)) { credit in
+            self.creditList = credit.cast
             group.leave()
         }
         
         group.notify(queue: .main) {
-            self.tableView.reloadData()
+            self.mainView.tableView.reloadData()
         }
-    }
-    
-    override func configureHierarchy() {
-        [
-            tableView
-        ].forEach { view.addSubview($0) }
-    }
-    
-    override func configureLayout() {
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
-    override func configureView() {
-        
     }
     
 }
 
 extension DetailViewController {
-    func configureCollectionViewLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        
-        layout.itemSize = CGSize(width: 120, height: 160)
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.scrollDirection = .horizontal
-        return layout
-    }
+
 }
 
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {

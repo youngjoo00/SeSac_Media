@@ -13,27 +13,12 @@ class TMDBAPIManager {
     static let shared = TMDBAPIManager()
     private init() {}
     
-    func fetchTV(api: TMDBAPI, completionHandler: @escaping ([TV]) -> Void) {
+    func callRequest<T: Decodable>(type: T.Type ,api: TMDBAPI, completionHandler: @escaping (T) -> Void) {
         
         AF.request(api.endpoint,
                    parameters: api.parameter,
                    encoding: URLEncoding(destination: .queryString),
-                   headers: api.header).responseDecodable(of: TVModel.self) { response in
-            switch response.result {
-            case .success(let data):
-                completionHandler(data.results)
-            case .failure(let fail):
-                print(fail)
-            }
-        }
-    }
-    
-    func fetchDetail(api: TMDBAPI, completionHandler: @escaping (DetailModel) -> Void) {
-        
-        AF.request(api.endpoint,
-                   parameters: api.parameter,
-                   encoding: URLEncoding(destination: .queryString),
-                   headers: api.header).responseDecodable(of: DetailModel.self) { response in
+                   headers: api.header).responseDecodable(of: T.self) { response in
             switch response.result {
             case .success(let data):
                 completionHandler(data)
@@ -42,19 +27,5 @@ class TMDBAPIManager {
             }
         }
     }
-    
-    func fetchCredit(api: TMDBAPI, completionHandler: @escaping ([Cast]) -> Void) {
-        
-        AF.request(api.endpoint,
-                   parameters: api.parameter,
-                   encoding: URLEncoding(destination: .queryString),
-                   headers: api.header).responseDecodable(of: CreditModel.self) { response in
-            switch response.result {
-            case .success(let data):
-                completionHandler(data.cast)
-            case .failure(let fail):
-                print(fail)
-            }
-        }
-    }
+
 }

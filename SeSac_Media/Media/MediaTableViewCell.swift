@@ -14,11 +14,11 @@ class MediaTableViewCell: BaseTableViewCell {
         $0.text = "테스트"
     }
     
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout()).then {
+    lazy var collectionView = PosterCollectionView().then {
         $0.backgroundColor = .clear
         $0.register(HorizontalCollectionViewCell.self, forCellWithReuseIdentifier: HorizontalCollectionViewCell.identifier)
     }
-
+    
     override func configureHierarchy() {
         [
             titleLabel,
@@ -47,14 +47,5 @@ class MediaTableViewCell: BaseTableViewCell {
 }
 
 extension MediaTableViewCell {
-    func configureCollectionViewLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        
-        layout.itemSize = CGSize(width: 120, height: 160)
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.scrollDirection = .horizontal
-        return layout
-    }
+
 }

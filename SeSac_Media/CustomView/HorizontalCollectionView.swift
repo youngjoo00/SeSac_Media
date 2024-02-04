@@ -11,8 +11,6 @@ import Kingfisher
 
 class HorizontalCollectionView: UICollectionView {
     
-    var list: [TV] = []
-    
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: HorizontalCollectionView.configureCollectionViewLayout())
         
@@ -28,15 +26,8 @@ class HorizontalCollectionView: UICollectionView {
 
 extension HorizontalCollectionView {
     
-    func updateData(data: [TV]) {
-        self.list = data
-        self.reloadData()
-    }
-    
     func configureView() {
-        delegate = self
-        dataSource = self
-        register(HorizontalCollectionViewCell.self, forCellWithReuseIdentifier: "HorizontalCollectionViewCell")
+        register(PosterCollectionViewCell.self, forCellWithReuseIdentifier: "HorizontalCollectionViewCell")
         backgroundColor = .clear
     }
     
@@ -49,26 +40,6 @@ extension HorizontalCollectionView {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.scrollDirection = .horizontal
         return layout
-    }
-    
-    
-}
-
-extension HorizontalCollectionView: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return list.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCollectionViewCell", for: indexPath) as! HorizontalCollectionViewCell
-        
-        let row = list[indexPath.item]
-        
-        guard let poster = row.poster_path else { return cell }
-        let url = URL(string: TMDBAPI.baseImageURL + poster)
-        cell.posterImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "square.and.arrow.down"))
-        
-        return cell
     }
     
     

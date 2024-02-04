@@ -18,8 +18,8 @@ class DetailViewController: BaseViewController {
     
     var id = 0
     
-    var titleList = ["출연진", "유사한 장르 추천"]
-    var dataList: DetailModel = DetailModel(adult: false, backdropPath: "", genres: [], id: 0, originalName: "", overview: "", posterPath: "")
+    var titleList = ["", "출연진", "유사한 장르 추천"]
+    var dataList: DetailModel = DetailModel(adult: false, backdropPath: "", genres: [], id: 0, originalName: "", overview: "", posterPath: "", seasons: [])
     var recommendList: [TV] = []
     var creditList: [Cast] = []
     
@@ -28,6 +28,7 @@ class DetailViewController: BaseViewController {
         
         mainView.tableView.dataSource = self
         mainView.tableView.delegate = self
+        navigationItem.titleView = mainView.navTitle
         
         let group = DispatchGroup()
         
@@ -63,7 +64,7 @@ extension DetailViewController {
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return titleList.count + 1
+        return dataList.seasons.count + titleList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -78,19 +79,56 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.airDateLabel.text = "2000.00.00"
             cell.genresLabel.text = "장르"
             return cell
-        } else {
+        } else if indexPath.row == 1 + dataList.seasons.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailSubTableViewCell.identifier, for: indexPath) as! DetailSubTableViewCell
 
-            cell.titleLabel.text = titleList[indexPath.row - 1]
+            cell.titleLabel.text = titleList[indexPath.row - dataList.seasons.count]
             cell.collectionView.delegate = self
             cell.collectionView.dataSource = self
-            cell.collectionView.tag = indexPath.row - 1
+            cell.collectionView.tag = indexPath.row - dataList.seasons.count - 1
             
             cell.collectionView.reloadData()
+            return cell
+        } else if indexPath.row == 2 + dataList.seasons.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailSubTableViewCell.identifier, for: indexPath) as! DetailSubTableViewCell
+
+            cell.titleLabel.text = titleList[indexPath.row - dataList.seasons.count]
+            cell.collectionView.delegate = self
+            cell.collectionView.dataSource = self
+            cell.collectionView.tag = indexPath.row - dataList.seasons.count
+            
+            cell.collectionView.reloadData()
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailSeasonTableViewCell.identifier, for: indexPath) as! DetailSeasonTableViewCell
+            
+            let row = dataList.seasons[indexPath.row - 1]
+
+            cell.titleLabel.text = row.name
+            
+            if row.poster_path! != "xmark" {
+                let url = URL(string: TMDBAPI.baseImageURL + row.poster_path!)
+                cell.posterImageView.kf.setImage(with: url)
+            } else {
+                cell.posterImageView.image = UIImage(systemName: row.poster_path!)
+            }
+            
+            
+            cell.episodeCount.text = "Episode \(row.episode_count)"
+            
             return cell
         }
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = indexPath.row - 1
+        print(row)
+        if row >= 0 && row < dataList.seasons.count {
+            let vc = EpisodeViewController()
+            vc.data = (dataList.id, dataList.seasons[row].season_number)
+            transition(viewController: vc, style: .push)
+        }
+    }
 }
 
 extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -104,7 +142,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HorizontalCollectionViewCell.identifier, for: indexPath) as! HorizontalCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.identifier, for: indexPath) as! PosterCollectionViewCell
         
         if collectionView.tag == 0 {
             guard let poster = creditList[indexPath.row].profilePath else { return cell }

@@ -1,30 +1,29 @@
 //
-//  MediaView.swift
+//  EpisodeView.swift
 //  SeSac_Media
 //
-//  Created by youngjoo on 2/1/24.
+//  Created by youngjoo on 2/5/24.
 //
 
 import UIKit
+import SnapKit
+import Then
 
-class MediaView: BaseView {
+class EpisodeView: BaseView {
     
-    let navTitle = WhiteTitleLabel().then {
-        $0.text = "YoungTV"
-    }
-    
+    let navTitle = WhiteTitleLabel()
     let tableView = UITableView().then {
-        $0.register(MediaTableViewCell.self, forCellReuseIdentifier: MediaTableViewCell.identifier)
-        $0.rowHeight = 210
+        $0.register(EpisodeTableViewCell.self, forCellReuseIdentifier: EpisodeTableViewCell.identifier)
         $0.backgroundColor = .clear
-        $0.isScrollEnabled = false
+        $0.rowHeight = UITableView.automaticDimension
+        $0.estimatedRowHeight = 300
     }
     
     override func configureHierarchy() {
         [
+            navTitle,
             tableView
         ].forEach { addSubview($0) }
-        
     }
     
     override func configureLayout() {
@@ -34,6 +33,6 @@ class MediaView: BaseView {
     }
     
     override func configureView() {
-
+        
     }
 }

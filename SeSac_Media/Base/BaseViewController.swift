@@ -13,6 +13,8 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .black
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.topItem?.title = ""
         
         configureHierarchy()
         configureLayout()

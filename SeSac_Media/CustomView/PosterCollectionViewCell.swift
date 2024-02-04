@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class HorizontalCollectionViewCell: BaseCollectionViewCell {
+class PosterCollectionViewCell: BaseCollectionViewCell {
     
     let posterImageView = PosterImageView(frame: .zero)
     

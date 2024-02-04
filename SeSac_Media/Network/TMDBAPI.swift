@@ -15,6 +15,8 @@ enum TMDBAPI {
     case detail(id: Int)
     case recommend(id: Int)
     case credit(id: Int)
+    case search(query: String)
+    case seasonDetail(seriseID: Int, seasonNumber: Int)
     
     var baseURL: String {
         return "https://api.themoviedb.org/3/"
@@ -40,6 +42,10 @@ enum TMDBAPI {
             return URL(string: baseURL + "tv/\(id)/recommendations")!
         case .credit(let id):
             return URL(string: baseURL + "tv/\(id)/aggregate_credits")!
+        case .search:
+            return URL(string: baseURL + "search/tv")!
+        case .seasonDetail(let seriseID, let seasonNumber):
+            return URL(string: baseURL + "tv/\(seriseID)/season/\(seasonNumber)")!
         }
     }
     
@@ -60,6 +66,12 @@ enum TMDBAPI {
         case .recommend:
             return languageParameter
         case .credit:
+            return languageParameter
+        case .search(let query):
+            var param = languageParameter
+            param = ["query": query]
+            return param
+        case .seasonDetail:
             return languageParameter
         }
     }

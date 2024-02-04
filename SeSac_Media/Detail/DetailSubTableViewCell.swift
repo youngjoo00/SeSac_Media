@@ -15,7 +15,7 @@ class DetailSubTableViewCell: BaseTableViewCell {
     
     lazy var collectionView = PosterCollectionView().then {
         $0.backgroundColor = .clear
-        $0.register(HorizontalCollectionViewCell.self, forCellWithReuseIdentifier: HorizontalCollectionViewCell.identifier)
+        $0.register(PosterCollectionViewCell.self, forCellWithReuseIdentifier: PosterCollectionViewCell.identifier)
     }
     
     override func configureHierarchy() {
@@ -35,7 +35,7 @@ class DetailSubTableViewCell: BaseTableViewCell {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(contentView)
-            //make.height.equalTo(160)
+            make.height.equalTo(160)
         }
     }
     

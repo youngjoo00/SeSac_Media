@@ -16,8 +16,8 @@ class TabBarController: UITabBarController {
         let firstTabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 0)
         firstTab.tabBarItem = firstTabBarItem
         
-        let secondTab = UINavigationController(rootViewController: Example2ViewController())
-        let secondTabBarItem = UITabBarItem(title: "example", image: UIImage(systemName: "video"), tag: 1)
+        let secondTab = UINavigationController(rootViewController: SearchViewController())
+        let secondTabBarItem = UITabBarItem(title: "검색", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         secondTab.tabBarItem = secondTabBarItem
         
         let thirdTab = UINavigationController(rootViewController: SettingViewController())

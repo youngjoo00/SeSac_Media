@@ -23,9 +23,11 @@ class MediaViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.titleView = mainView.navTitle
+        
         mainView.tableView.dataSource = self
         mainView.tableView.delegate = self
-        
+
         let group = DispatchGroup()
         
         // 만약 데이터가 안들어오면 ARCCount 가 초기화되지 않아서 notify를 실행할 수 없게된다,,
@@ -83,7 +85,7 @@ extension MediaViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HorizontalCollectionViewCell.identifier, for: indexPath) as! HorizontalCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.identifier, for: indexPath) as! PosterCollectionViewCell
         
         guard let poster = dataList[collectionView.tag][indexPath.row].poster_path else { return cell }
         let url = URL(string: TMDBAPI.baseImageURL + poster)

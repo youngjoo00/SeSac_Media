@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import Toast
 
 class MediaViewController: BaseViewController {
 
@@ -36,9 +37,12 @@ class MediaViewController: BaseViewController {
             if let tv = tv {
                 self.dataList[0] = tv.results
             } else {
-                print("에러입니다.")
+                guard let error = error else { return }
+                self.showToast(message: error.rawValue)
             }
             group.leave()
+            
+            
         }
         
         group.enter()
@@ -47,7 +51,8 @@ class MediaViewController: BaseViewController {
             if let tv = tv {
                 self.dataList[1] = tv.results
             } else {
-                print("에러입니다.")
+                guard let error = error else { return }
+                self.showToast(message: error.rawValue)
             }
             group.leave()
         }
@@ -58,7 +63,8 @@ class MediaViewController: BaseViewController {
             if let tv = tv {
                 self.dataList[2] = tv.results
             } else {
-                print("에러입니다.")
+                guard let error = error else { return }
+                self.showToast(message: error.rawValue)
             }
             group.leave()
         }

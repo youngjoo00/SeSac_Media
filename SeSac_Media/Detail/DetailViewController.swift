@@ -38,7 +38,8 @@ class DetailViewController: BaseViewController {
             if let detail = detail {
                 self.dataList = detail
             } else {
-                print("에러입니다.")
+                guard let error = error else { return }
+                self.showToast(message: error.rawValue)
             }
             group.leave()
         }
@@ -49,7 +50,8 @@ class DetailViewController: BaseViewController {
             if let recommend = recommend {
                 self.recommendList = recommend.results
             } else {
-                print("에러입니다.")
+                guard let error = error else { return }
+                self.showToast(message: error.rawValue)
             }
             group.leave()
         }
@@ -60,7 +62,8 @@ class DetailViewController: BaseViewController {
             if let credit = credit {
                 self.creditList = credit.cast
             } else {
-                print("에러입니다.")
+                guard let error = error else { return }
+                self.showToast(message: error.rawValue)
             }
             group.leave()
         }

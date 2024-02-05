@@ -7,11 +7,11 @@
 
 import Foundation
 
-enum ErrorStatus {
-    case failedRequest
-    case noData
-    case invalidResponse
-    case invalidData
+enum ErrorStatus: String {
+    case failedRequest = "네트워크 통신이 실패했어요"
+    case noData = "통신은 성공했으나, 데이터를 받아오지 못했어요"
+    case invalidResponse = "응답을 제대로 처리하지 못했어요"
+    case invalidData = "서버에서 받은 데이터를 처리하는데 문제가 발생했어요"
 }
 
 class TMDBSessionManager {
@@ -87,25 +87,21 @@ class TMDBSessionManager {
             
             DispatchQueue.main.async {
                 guard error == nil else {
-                    print("통신 실패요")
                     completionHandler(nil, .failedRequest)
                     return
                 }
                 
                 guard let data = data else {
-                    print("데이터 안들어와요")
                     completionHandler(nil, .noData)
                     return
                 }
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    print("상태코드가 안들어와요")
                     completionHandler(nil, .invalidResponse)
                     return
                 }
                 
                 guard httpResponse.statusCode == 200 else {
-                    print("TMDB는 200 일때 값을 줌")
                     completionHandler(nil, .failedRequest)
                     return
                 }
@@ -117,9 +113,6 @@ class TMDBSessionManager {
                     completionHandler(nil, .noData)
                 }
                 
-                print(data)
-                print(httpResponse)
-                print(httpResponse.statusCode)
             }
             
             

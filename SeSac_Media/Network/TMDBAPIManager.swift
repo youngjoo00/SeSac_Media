@@ -13,7 +13,7 @@ class TMDBAPIManager {
     static let shared = TMDBAPIManager()
     private init() {}
     
-    func callRequest<T: Decodable>(type: T.Type ,api: TMDBAPI, completionHandler: @escaping (T?, AFError?) -> Void) {
+    func callRequest<T: Decodable>(type: T.Type ,api: TMDBAPI, completionHandler: @escaping (T?, ErrorStatus?) -> Void) {
         
         AF.request(api.endpoint,
                    parameters: api.parameter,
@@ -23,7 +23,8 @@ class TMDBAPIManager {
             case .success(let data):
                 completionHandler(data, nil)
             case .failure(let fail):
-                completionHandler(nil, fail)
+                // 다음에 AF 에서도 다양한 에러핸들링을 시도해봐야겠다.
+                completionHandler(nil, .failedRequest)
             }
         }
     }

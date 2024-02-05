@@ -28,7 +28,8 @@ class SearchDetailViewController: BaseViewController {
             if let search = search {
                 self.dataList = search.results
             } else {
-                print("에러입니다.")
+                guard let error = error else { return }
+                print(error)
             }
             self.mainView.collectionView.reloadData()
         }

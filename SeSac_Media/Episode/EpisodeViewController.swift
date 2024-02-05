@@ -22,9 +22,16 @@ class EpisodeViewController: BaseViewController {
         mainView.tableView.dataSource = self
         
         TMDBAPIManager.shared.callRequest(type: SeasonDetailModel.self,
-                                          api: .seasonDetail(seriseID: data.id,seasonNumber: data.seasonNumber)) { episode in
-            self.dataList = episode
-            self.mainView.tableView.reloadData()
+                                          api: .seasonDetail(seriseID: data.id,seasonNumber: data.seasonNumber)) { episode, error in
+            
+            if let episode = episode {
+                self.dataList = episode
+                self.mainView.tableView.reloadData()
+            } else {
+                guard let error = error else { return }
+                print(error)
+            }
+            
         }
     }
     
@@ -53,10 +60,15 @@ extension EpisodeViewController: UITableViewDelegate, UITableViewDataSource {
             cell.posterImage.image = UIImage(systemName: row.still_path!)
         }
         
-        
         cell.titleLabel.text = "\(row.episode_number). " + row.name
-        cell.runTimeLabel.text = "\(row.runtime)분"
         cell.overviewLabel.text = row.overview
+        
+        if row.runtime! != 0 {
+            cell.runTimeLabel.text = "\(row.runtime!)분"
+        } else {
+            cell.runTimeLabel.text = "정보 없음"
+        }
+        
         return cell
     }
     

@@ -23,8 +23,13 @@ class SearchDetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .search(query: searchText)) { search in
-            self.dataList = search.results
+        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .search(query: searchText)) { search, error in
+            
+            if let search = search {
+                self.dataList = search.results
+            } else {
+                print("에러입니다.")
+            }
             self.mainView.collectionView.reloadData()
         }
     }

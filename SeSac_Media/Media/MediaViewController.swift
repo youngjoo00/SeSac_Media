@@ -30,28 +30,43 @@ class MediaViewController: BaseViewController {
 
         let group = DispatchGroup()
         
-        // 만약 데이터가 안들어오면 ARCCount 가 초기화되지 않아서 notify를 실행할 수 없게된다,,
         group.enter()
-        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .tvTrend) { tv in
-            self.dataList[0] = tv.results
+        TMDBSessionManager.shared.callRequest(type: TVModel.self, api: .tvTrend) { tv, error in
+            
+            if let tv = tv {
+                self.dataList[0] = tv.results
+            } else {
+                print("에러입니다.")
+            }
             group.leave()
         }
         
         group.enter()
-        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .topRate) { tv in
-            self.dataList[1] = tv.results
+        TMDBSessionManager.shared.callRequest(type: TVModel.self, api: .topRate) { tv, error in
+            
+            if let tv = tv {
+                self.dataList[1] = tv.results
+            } else {
+                print("에러입니다.")
+            }
             group.leave()
         }
         
         group.enter()
-        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .popular) { tv in
-            self.dataList[2] = tv.results
+        TMDBSessionManager.shared.callRequest(type: TVModel.self, api: .popular) { tv, error in
+            
+            if let tv = tv {
+                self.dataList[2] = tv.results
+            } else {
+                print("에러입니다.")
+            }
             group.leave()
         }
         
         group.notify(queue: .main) {
             self.mainView.tableView.reloadData()
         }
+        
     }
     
 }

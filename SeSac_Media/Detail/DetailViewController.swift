@@ -33,20 +33,35 @@ class DetailViewController: BaseViewController {
         let group = DispatchGroup()
         
         group.enter()
-        TMDBAPIManager.shared.callRequest(type: DetailModel.self, api: .detail(id: id)) { detail in
-            self.dataList = detail
+        TMDBAPIManager.shared.callRequest(type: DetailModel.self, api: .detail(id: id)) { detail, error in
+            
+            if let detail = detail {
+                self.dataList = detail
+            } else {
+                print("에러입니다.")
+            }
             group.leave()
         }
         
         group.enter()
-        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .recommend(id: id)) { recommend in
-            self.recommendList = recommend.results
+        TMDBAPIManager.shared.callRequest(type: TVModel.self, api: .recommend(id: id)) { recommend, error in
+            
+            if let recommend = recommend {
+                self.recommendList = recommend.results
+            } else {
+                print("에러입니다.")
+            }
             group.leave()
         }
         
         group.enter()
-        TMDBAPIManager.shared.callRequest(type: CreditModel.self, api: .credit(id: id)) { credit in
-            self.creditList = credit.cast
+        TMDBAPIManager.shared.callRequest(type: CreditModel.self, api: .credit(id: id)) { credit, error in
+            
+            if let credit = credit {
+                self.creditList = credit.cast
+            } else {
+                print("에러입니다.")
+            }
             group.leave()
         }
         

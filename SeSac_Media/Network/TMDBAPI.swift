@@ -69,7 +69,7 @@ enum TMDBAPI {
             return languageParameter
         case .search(let query):
             var param = languageParameter
-            param = ["query": query]
+            param["query"] = query
             return param
         case .seasonDetail:
             return languageParameter

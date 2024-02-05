@@ -18,7 +18,7 @@ struct Episode: Decodable {
     let name: String
     let overview: String
     let production_code: String
-    let runtime: Int
+    let runtime: Int?
     let season_number: Int
     let show_id: Int
     let still_path: String?
@@ -48,7 +48,7 @@ struct Episode: Decodable {
         self.name = try container.decode(String.self, forKey: .name)
         self.overview = try container.decode(String.self, forKey: .overview)
         self.production_code = try container.decode(String.self, forKey: .production_code)
-        self.runtime = try container.decode(Int.self, forKey: .runtime)
+        self.runtime = try container.decodeIfPresent(Int.self, forKey: .runtime) ?? 0
         self.season_number = try container.decode(Int.self, forKey: .season_number)
         self.show_id = try container.decode(Int.self, forKey: .show_id)
         self.still_path = try container.decodeIfPresent(String.self, forKey: .still_path) ?? "xmark"

@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class DetailViewController: BaseViewController {
+final class DetailViewController: BaseViewController {
     
     let mainView = DetailView()
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EpisodeViewController: BaseViewController {
+final class EpisodeViewController: BaseViewController {
     
     let mainView = EpisodeView()
     

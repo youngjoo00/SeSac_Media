@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchDetailViewController: BaseViewController {
+final class SearchDetailViewController: BaseViewController {
 
     let mainView = SearchDetailView()
     

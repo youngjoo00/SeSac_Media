@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import Toast
 
-class MediaViewController: BaseViewController {
+final class MediaViewController: BaseViewController {
 
     let mainView = MediaView()
     

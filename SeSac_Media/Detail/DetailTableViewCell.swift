@@ -6,14 +6,17 @@
 //
 
 import UIKit
+import SnapKit
+import Then
 
-class DetailTableViewCell: BaseTableViewCell {
+final class DetailTableViewCell: BaseTableViewCell {
 
     let posterImage = UIImageView()
     let titleLabel = WhiteTitleLabel()
     let genresLabel = WhiteTitleLabel()
     let overviewLabel = WhiteTitleLabel()
     let airDateLabel = WhiteTitleLabel()
+    let playBtn = UIButton()
     
     override func configureHierarchy() {
         [
@@ -22,6 +25,7 @@ class DetailTableViewCell: BaseTableViewCell {
             genresLabel,
             overviewLabel,
             airDateLabel,
+            playBtn,
         ].forEach { contentView.addSubview($0) }
     }
     
@@ -29,6 +33,11 @@ class DetailTableViewCell: BaseTableViewCell {
         posterImage.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(contentView)
             make.height.equalTo(200)
+        }
+        
+        playBtn.snp.makeConstraints { make in
+            make.center.equalTo(posterImage)
+            make.size.equalTo(50)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -64,6 +73,11 @@ class DetailTableViewCell: BaseTableViewCell {
         overviewLabel.font = .systemFont(ofSize: 15)
         overviewLabel.numberOfLines = 0
         selectionStyle = .none
+        
+        playBtn.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
+        playBtn.tintColor = .black
+        playBtn.contentVerticalAlignment = .fill
+        playBtn.contentHorizontalAlignment = .fill
     }
 }
 

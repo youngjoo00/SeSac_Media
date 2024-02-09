@@ -17,6 +17,7 @@ enum TMDBAPI {
     case credit(id: Int)
     case search(query: String)
     case seasonDetail(seriseID: Int, seasonNumber: Int)
+    case video(id: Int)
     
     var baseURL: String {
         return "https://api.themoviedb.org/3/"
@@ -46,6 +47,8 @@ enum TMDBAPI {
             return URL(string: baseURL + "search/tv")!
         case .seasonDetail(let seriseID, let seasonNumber):
             return URL(string: baseURL + "tv/\(seriseID)/season/\(seasonNumber)")!
+        case .video(let id):
+            return URL(string: baseURL + "tv/\(id)/videos")!
         }
     }
     
@@ -72,6 +75,8 @@ enum TMDBAPI {
             param["query"] = query
             return param
         case .seasonDetail:
+            return languageParameter
+        case .video:
             return languageParameter
         }
     }

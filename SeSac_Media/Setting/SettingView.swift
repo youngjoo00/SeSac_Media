@@ -17,9 +17,21 @@ final class SettingView: BaseView {
     
     let profileImageView = UIImageView().then {
         $0.clipsToBounds = true
-        $0.image = UIImage(systemName: "star")
+        $0.image = UIImage(systemName: "person")
+        $0.tintColor = .white
         $0.layer.borderWidth = 5
         $0.layer.borderColor = UIColor.white.cgColor
+        $0.contentMode = .scaleAspectFill
+    }
+    
+    let profileEditBtn = UIButton().then {
+        var configuration = UIButton.Configuration.gray()
+        configuration.title = "프로필 이미지 설정"
+        configuration.image = UIImage(systemName: "pencil")
+        configuration.baseForegroundColor = .white
+        configuration.baseBackgroundColor = .lightGray
+        configuration.imagePadding = 10
+        $0.configuration = configuration
     }
     
     let tableView = UITableView().then {
@@ -34,6 +46,7 @@ final class SettingView: BaseView {
         [
             tableView,
             profileImageView,
+            profileEditBtn,
         ].forEach { addSubview($0) }
         
     }
@@ -43,6 +56,12 @@ final class SettingView: BaseView {
             make.top.equalTo(safeAreaLayoutGuide).offset(16)
             make.centerX.equalTo(safeAreaLayoutGuide)
             make.size.equalTo(100)
+        }
+        
+        profileEditBtn.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom).offset(20)
+            make.height.equalTo(44)
+            make.centerX.equalTo(safeAreaLayoutGuide)
         }
         
         tableView.snp.makeConstraints { make in

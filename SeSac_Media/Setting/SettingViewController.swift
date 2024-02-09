@@ -24,9 +24,42 @@ final class SettingViewController: BaseViewController {
         
         mainView.tableView.dataSource = self
         mainView.tableView.delegate = self
+        
+        mainView.profileEditBtn.addTarget(self, action: #selector(didProfileEditBtnTapped), for: .touchUpInside)
     }
     
 }
+
+extension SettingViewController {
+    
+    @objc private func didProfileEditBtnTapped() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let edit = UIAlertAction(title: "프로필 이미지 수정", style: .default) { action in
+            let vc = ProfileSearchViewController()
+            
+            vc.imageSpace = { image in
+                let url = URL(string: image)
+                self.mainView.profileImageView.kf.setImage(with: url)
+            }
+            self.transition(viewController: vc, style: .push)
+        }
+        
+        let delete = UIAlertAction(title: "프로필 이미지 삭제", style: .default) { action in
+            self.mainView.profileImageView.image = UIImage(systemName: "person")
+        }
+        
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        
+        alert.addAction(edit)
+        alert.addAction(delete)
+        alert.addAction(cancel)
+        
+        present(alert, animated: true)
+    }
+    
+}
+
 
 extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -58,7 +91,6 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         let selectedIndexPath = indexPath
         
         vc.contentSpace = { text in
-            // 처음에는 셀에 직접 접근해서 text 를 바꾸려고 했는데, 고정관념을 깨고 해당 셀이 가진 contentList에 접근해서 셀을 조작하면 되는것이었다..
             self.contentList[selectedIndexPath.row] = text
             tableView.reloadData()
         }

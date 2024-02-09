@@ -15,10 +15,8 @@ class SearchView: BaseView {
         $0.text = "검색"
     }
     
-    let searchBar = UISearchBar().then {
-        $0.searchBarStyle = .minimal
+    let searchBar = UserSearchBar().then {
         $0.placeholder = "원하시는 TV 프로그램을 검색해보세요"
-        $0.searchTextField.backgroundColor = .systemGray4
     }
     
     override func configureHierarchy() {

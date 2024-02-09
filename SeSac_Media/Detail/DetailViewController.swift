@@ -77,6 +77,11 @@ final class DetailViewController: BaseViewController {
 
 extension DetailViewController {
 
+    @objc func didPlayBtnTapped() {
+        let vc = VideoViewController()
+        vc.id = id
+        transition(viewController: vc, style: .push)
+    }
 }
 
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
@@ -96,6 +101,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.overviewLabel.text = dataList.overview
             cell.airDateLabel.text = "2000.00.00"
             cell.genresLabel.text = "장르"
+            cell.playBtn.addTarget(self, action: #selector(didPlayBtnTapped), for: .touchUpInside)
             return cell
         } else if indexPath.row == 1 + dataList.seasons.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailSubTableViewCell.identifier, for: indexPath) as! DetailSubTableViewCell

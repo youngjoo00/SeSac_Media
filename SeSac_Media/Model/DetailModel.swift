@@ -32,10 +32,21 @@ struct DetailModel: Decodable {
 struct Genre: Decodable {
     let id: Int
     let name: String?
+    
+    enum CodingKeys: CodingKey {
+        case id
+        case name
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? "장르 오류"
+    }
 }
 
 struct Season: Decodable {
-    let air_date: String
+    let air_date: String?
     let episode_count: Int
     let id: Int
     let name: String
@@ -57,7 +68,7 @@ struct Season: Decodable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.air_date = try container.decode(String.self, forKey: .air_date)
+        self.air_date = try container.decodeIfPresent(String.self, forKey: .air_date) ?? "날짜 오류"
         self.episode_count = try container.decode(Int.self, forKey: .episode_count)
         self.id = try container.decode(Int.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)

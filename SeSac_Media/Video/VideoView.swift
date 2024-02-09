@@ -26,8 +26,7 @@ final class VideoView: BaseView {
     
     override func configureLayout() {
         webView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.centerY)
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
     }
     

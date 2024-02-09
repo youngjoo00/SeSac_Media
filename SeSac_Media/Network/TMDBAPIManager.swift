@@ -23,7 +23,7 @@ class TMDBAPIManager {
             case .success(let data):
                 completionHandler(data, nil)
             case .failure(let fail):
-                // 다음에 AF 에서도 다양한 에러핸들링을 시도해봐야겠다.
+                print(fail)
                 completionHandler(nil, .failedRequest)
             }
         }

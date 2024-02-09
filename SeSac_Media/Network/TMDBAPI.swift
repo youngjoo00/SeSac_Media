@@ -77,7 +77,11 @@ enum TMDBAPI {
         case .seasonDetail:
             return languageParameter
         case .video:
-            return languageParameter
+            var param = languageParameter
+            let query = "ko, en"
+            let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            param["include_video_language"] = encodedQuery
+            return param
         }
     }
 }

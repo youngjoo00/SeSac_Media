@@ -13,9 +13,13 @@ final class DetailTableViewCell: BaseTableViewCell {
 
     let posterImage = UIImageView()
     let titleLabel = WhiteTitleLabel()
-    let genresLabel = WhiteTitleLabel()
+    let genresLabel = WhiteTitleLabel().then {
+        $0.font = .boldSystemFont(ofSize: 17)
+    }
     let overviewLabel = WhiteTitleLabel()
-    let airDateLabel = WhiteTitleLabel()
+    let airDateLabel = WhiteTitleLabel().then {
+        $0.font = .boldSystemFont(ofSize: 17)
+    }
     let playBtn = UIButton()
     
     override func configureHierarchy() {
@@ -78,6 +82,7 @@ final class DetailTableViewCell: BaseTableViewCell {
         playBtn.tintColor = .black
         playBtn.contentVerticalAlignment = .fill
         playBtn.contentHorizontalAlignment = .fill
+ 
     }
 }
 

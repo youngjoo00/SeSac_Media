@@ -34,7 +34,6 @@ final class DetailViewController: BaseViewController {
         
         group.enter()
         TMDBAPIManager.shared.callRequest(type: DetailModel.self, api: .detail(id: id)) { detail, error in
-            
             if let detail = detail {
                 self.dataList = detail
             } else {
@@ -99,8 +98,13 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.posterImage.kf.setImage(with: url, placeholder: UIImage(systemName: "star"))
             cell.titleLabel.text = dataList.originalName
             cell.overviewLabel.text = dataList.overview
-            cell.airDateLabel.text = "2000.00.00"
-            cell.genresLabel.text = "장르"
+            cell.airDateLabel.text = dataList.seasons.first?.air_date
+            
+            var genre: [String] = []
+            for i in 0..<dataList.genres.count {
+                genre.append(dataList.genres[i].name!)
+            }
+            cell.genresLabel.text = genre.joined(separator: ", ")
             cell.playBtn.addTarget(self, action: #selector(didPlayBtnTapped), for: .touchUpInside)
             return cell
         } else if indexPath.row == 1 + dataList.seasons.count {

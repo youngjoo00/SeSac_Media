@@ -9,7 +9,7 @@ import Foundation
 
 struct ProfileSearchModel: Decodable {
     let total: Int
-    let items: [Item]
+    var items: [Item]
 }
 
 struct Item: Decodable {

@@ -10,11 +10,11 @@ import Kingfisher
 
 final class ProfileSearchViewController: BaseViewController {
     
-    let mainView = ProfileSearchView()
+    private let mainView = ProfileSearchView()
     
-    var start = 1
-    var sort = "sim"
-    
+    private var start = 1
+    private var sort = "sim"
+    private var searchText = ""
     var searchList: ProfileSearchModel = ProfileSearchModel(total: 0, items: []) {
         didSet {
             mainView.collectionView.reloadData()
@@ -35,21 +35,26 @@ final class ProfileSearchViewController: BaseViewController {
         
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
+        mainView.collectionView.prefetchDataSource = self
     }
 }
 
 extension ProfileSearchViewController {
     
-    private func fetchSearchImage(text query: String) {
+    private func fetchSearchImage(text query: String, start: Int, sort: String) {
         NaverAPIManager.shared.callRequest(type: ProfileSearchModel.self,
                                            api: .imageSearch(query: query, start: start, sort: sort)) { search, error in
             if let search = search {
-                self.searchList = search
+                if start == 1 {
+                    self.searchList = search
+                    self.mainView.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                } else {
+                    self.searchList.items.append(contentsOf: search.items)
+                }
             } else {
                 guard let error = error else { return }
                 self.showToast(message: error.rawValue)
             }
-            print(self.searchList)
         }
     }
 }
@@ -58,7 +63,9 @@ extension ProfileSearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
-        fetchSearchImage(text: text)
+        start = 1
+        searchText = text
+        fetchSearchImage(text: searchText, start: start, sort: sort)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -66,7 +73,16 @@ extension ProfileSearchViewController: UISearchBarDelegate {
     }
 }
 
-extension ProfileSearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension ProfileSearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        for item in indexPaths {
+            if searchList.items.count - 10 == item.row && searchList.items.count < searchList.total {
+                start += 30
+                fetchSearchImage(text: searchText, start: start, sort: sort)
+            }
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchList.items.count
     }
